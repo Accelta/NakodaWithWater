@@ -1,5 +1,4 @@
 using UnityEngine;
-
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Floater))]
 public abstract class EnemyBase : MonoBehaviour
@@ -9,23 +8,16 @@ public abstract class EnemyBase : MonoBehaviour
 
     public Transform player;
 
-    [System.Serializable]
-    public class Cannon
-    {
-        public Transform mainBody;          // Horizontal rotation (left/right)
-        public Transform barrel;            // Vertical rotation (up/down)
-        public Transform firePoint;         // Firing point
-        public float maxHorizontalRotation = 60f;  // Horizontal rotation limit
-        public float minVerticalRotation = -10f;   // Minimum vertical angle (down)
-        public float maxVerticalRotation = 30f;    // Maximum vertical angle (up)
-    }
+    // Change cannonMainBody and cannonBarrel to arrays/lists for multiple cannons
+    public Transform[] cannonMainBodies; // Main body of each cannon
+    public Transform[] cannonBarrels;    // Barrel of each cannon
+    public Transform[] firePoints;       // Fire points for each cannon
 
-    public Cannon[] cannons;            // Array of cannons on the enemy
-    public float detectionRange = 50f;
+    public float detectionRange = 50f;  
     public float fireRate = 1f;
     public float bulletForce = 500f;
     public GameObject bulletPrefab;
-    public float cannonRotationSpeed = 50f;
+    public float cannonRotationSpeed = 5f;
 
     private Floater floater;
     public float dragUnder = 2f;
@@ -52,7 +44,7 @@ public abstract class EnemyBase : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         floater = GetComponent<Floater>();
-        spawnPoint = transform.position;
+        spawnPoint = transform.position;  // Enemy's initial position as spawn point
         SetWanderTarget();
         AssignStats();
     }
@@ -71,7 +63,9 @@ public abstract class EnemyBase : MonoBehaviour
                 ChasePlayer();
                 RotateCannonsTowardPlayer();
                 if (IsInEngageRange())
+                {
                     currentState = State.Engaging;
+                }
                 break;
 
             case State.Engaging:
@@ -79,7 +73,9 @@ public abstract class EnemyBase : MonoBehaviour
                 RotateCannonsTowardPlayer();
                 TryFireAtPlayer();
                 if (!IsInEngageRange())
+                {
                     currentState = State.Chasing;
+                }
                 break;
         }
         MoveEnemy();
@@ -88,9 +84,13 @@ public abstract class EnemyBase : MonoBehaviour
     void WanderAroundSpawn()
     {
         if (Vector3.Distance(transform.position, wanderTarget) <= 1f)
+        {
             SetWanderTarget();
+        }
         else
+        {
             MoveTowardsTarget(wanderTarget, GetWanderSpeed());
+        }
     }
 
     void SetWanderTarget()
@@ -101,8 +101,11 @@ public abstract class EnemyBase : MonoBehaviour
 
     void LookForPlayer()
     {
-        if (Vector3.Distance(transform.position, player.position) <= detectionRange)
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        if (distanceToPlayer <= detectionRange)
+        {
             currentState = State.Chasing;
+        }
     }
 
     protected void ChasePlayer()
@@ -114,10 +117,15 @@ public abstract class EnemyBase : MonoBehaviour
     {
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
         if (playerRb != null)
+        {
             MoveTowardsTarget(player.position, playerRb.velocity.magnitude);
+        }
     }
 
-    bool IsInEngageRange() => Vector3.Distance(transform.position, player.position) <= engageRange;
+    bool IsInEngageRange()
+    {
+        return Vector3.Distance(transform.position, player.position) <= engageRange;
+    }
 
     void MoveTowardsTarget(Vector3 target, float targetSpeed)
     {
@@ -135,54 +143,38 @@ public abstract class EnemyBase : MonoBehaviour
         rb.MovePosition(rb.position + forwardMovement);
     }
 
-    // Rotate each cannon toward the player within horizontal and vertical limits
-   protected void RotateCannonsTowardPlayer()
-{
-    foreach (var cannon in cannons)
+    // Rotate all cannons toward the player
+    protected void RotateCannonsTowardPlayer()
     {
-        Vector3 directionToPlayer = (player.position - cannon.mainBody.position).normalized;
+        for (int i = 0; i < cannonMainBodies.Length; i++)
+        {
+            Vector3 directionToPlayer = (player.position - cannonMainBodies[i].position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
 
-        // Separate rotation for horizontal (main body) and vertical (barrel) axes
-        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            // Smoothly rotate the cannon toward the player
+            cannonMainBodies[i].rotation = Quaternion.Slerp(cannonMainBodies[i].rotation, lookRotation, cannonRotationSpeed * Time.deltaTime);
 
-        // Horizontal rotation for main body (left/right)
-        float targetYaw = targetRotation.eulerAngles.y;
-        if (targetYaw > 180f) targetYaw -= 360f;  // Normalize angle to [-180, 180]
-
-        float currentYaw = cannon.mainBody.localEulerAngles.y;
-        if (currentYaw > 180f) currentYaw -= 360f; // Normalize to [-180, 180]
-
-        float clampedYaw = Mathf.Clamp(currentYaw + Mathf.DeltaAngle(currentYaw, targetYaw) * Time.deltaTime * cannonRotationSpeed,
-            -cannon.maxHorizontalRotation, cannon.maxHorizontalRotation);
-
-        cannon.mainBody.localRotation = Quaternion.Euler(0f, clampedYaw, 0f);
-
-        // Vertical rotation for barrel (up/down)
-        Vector3 localDirectionToPlayer = cannon.mainBody.InverseTransformDirection(directionToPlayer); // Local to main body
-        float targetPitch = Mathf.Atan2(localDirectionToPlayer.y, localDirectionToPlayer.z) * Mathf.Rad2Deg;
-        
-        float currentPitch = cannon.barrel.localEulerAngles.x;
-        if (currentPitch > 180f) currentPitch -= 360f;
-
-        float clampedPitch = Mathf.Clamp(currentPitch + Mathf.DeltaAngle(currentPitch, targetPitch) * Time.deltaTime * cannonRotationSpeed,
-            cannon.minVerticalRotation, cannon.maxVerticalRotation);
-
-        cannon.barrel.localRotation = Quaternion.Euler(clampedPitch, 0f, 0f);
+            // Optional vertical barrel rotation
+            Vector3 flatDirection = new Vector3(directionToPlayer.x, 0f, directionToPlayer.z);
+            float barrelAngle = Vector3.Angle(flatDirection, directionToPlayer);
+            cannonBarrels[i].localRotation = Quaternion.Euler(-barrelAngle, 0, 0);
+        }
     }
-}
 
-
+    // Fire from all cannons at the player
     protected void TryFireAtPlayer()
     {
         if (Time.time >= nextFireTime)
         {
-            foreach (var cannon in cannons)
-                FireBullet(cannon.firePoint);
-
+            for (int i = 0; i < firePoints.Length; i++)
+            {
+                FireBullet(firePoints[i]);
+            }
             nextFireTime = Time.time + 1f / fireRate;
         }
     }
 
+    // Fire bullet from specific fire point
     protected void FireBullet(Transform firePoint)
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
@@ -192,18 +184,29 @@ public abstract class EnemyBase : MonoBehaviour
 
         Bullet bulletScript = bullet.GetComponent<Bullet>();
         if (bulletScript != null)
+        {
             bulletScript.SetDamage(attackPower);
+        }
     }
 
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if (health <= 0) Die();
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
-    protected virtual void Die() => Destroy(gameObject);
+    protected virtual void Die()
+    {
+        Destroy(gameObject);
+    }
 
-    void AdjustDrag() => rb.drag = floater.underwater ? dragUnder : dragOver;
+    void AdjustDrag()
+    {
+        rb.drag = floater.underwater ? dragUnder : dragOver;
+    }
 
     protected abstract void AssignStats();
 
