@@ -210,4 +210,5 @@ public abstract class EnemyBase : MonoBehaviour
     protected abstract float GetWanderSpeed();
 
     protected abstract float GetChaseSpeed();
+    //iuy
 }
