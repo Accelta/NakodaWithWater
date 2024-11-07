@@ -1,26 +1,28 @@
 using UnityEngine;
+
 public class SmallEnemy : EnemyBase
 {
     protected override void AssignStats()
     {
-        health = 50f;          // Small enemies have lower health
-        attackPower = 10f;      // Lower attack power
+        healthComponent.maxHealth = 50f;  // Low health
+        attackPower = 10f;                // Low attack power
+        maxSpeed = 25f;                   // High speed
+        fireRate = 1f;                    // High fire rate
     }
 
     protected override float GetWanderSpeed()
     {
-        return 10f;  // Fast wandering speed for small enemy
+        return maxSpeed * 0.8f;  // Speed while wandering
     }
 
     protected override float GetChaseSpeed()
     {
-        return maxSpeed;  // Fast chase speed for small enemy
+        return maxSpeed;  // Full speed while chasing
     }
-    
+
     protected override void Die()
     {
         base.Die();
         Debug.Log("Small enemy destroyed!");
-        // Additional behavior on death can be added here
     }
 }

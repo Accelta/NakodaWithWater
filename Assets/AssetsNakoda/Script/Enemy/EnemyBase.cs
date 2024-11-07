@@ -1,6 +1,8 @@
 using UnityEngine;
+
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Floater))]
+[RequireComponent(typeof(Health))]
 public abstract class EnemyBase : MonoBehaviour
 {
     public enum State { Wandering, Chasing, Engaging }
@@ -35,18 +37,26 @@ public abstract class EnemyBase : MonoBehaviour
     private Vector3 wanderTarget;
     private float nextFireTime = 0f;
 
-    protected float health;
+    protected Health healthComponent;
     protected float attackPower;
     protected float wanderRadius = 20f;
     public float engageRange = 10f;
 
-    void Start()
+    protected virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
         floater = GetComponent<Floater>();
+        healthComponent = GetComponent<Health>();
+
+        healthComponent.OnDeath += Die;
+        AssignStats();
+        healthComponent.InitializeHealth(healthComponent.maxHealth);
+    }
+
+    void Start()
+    {
         spawnPoint = transform.position;  // Enemy's initial position as spawn point
         SetWanderTarget();
-        AssignStats();
     }
 
     void FixedUpdate()
@@ -191,11 +201,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
-        if (health <= 0)
-        {
-            Die();
-        }
+        healthComponent.TakeDamage(damage);
     }
 
     protected virtual void Die()
@@ -213,5 +219,95 @@ public abstract class EnemyBase : MonoBehaviour
     protected abstract float GetWanderSpeed();
 
     protected abstract float GetChaseSpeed();
-    //tes
 }
+
+// using UnityEngine;
+
+// [RequireComponent(typeof(Rigidbody))]
+// [RequireComponent(typeof(Floater))]
+// [RequireComponent(typeof(Health))]
+// [RequireComponent(typeof(EnemyMovement))]
+// [RequireComponent(typeof(EnemyCannon))]
+// public abstract class EnemyBase : MonoBehaviour
+// {
+//     public enum State { Wandering, Chasing, Engaging }
+//     public State currentState = State.Wandering;
+
+//     [Header("References")]
+//     public Transform player;
+
+//     private EnemyMovement movement;
+//     private EnemyCannon cannon;
+//     protected Health healthComponent;
+
+//     protected float attackPower;
+//     protected float maxSpeed;
+//     protected float fireRate;
+
+//     protected virtual void Awake()
+//     {
+//         movement = GetComponent<EnemyMovement>();
+//         cannon = GetComponent<EnemyCannon>();
+//         healthComponent = GetComponent<Health>();
+
+//         healthComponent.OnDeath += Die;
+//         AssignStats();
+//         healthComponent.InitializeHealth(healthComponent.maxHealth);
+
+//         movement.SetMovementStats(maxSpeed, 5f, 2f, 20f, 2f, 0.5f); // Example values for acceleration, turnSpeed, wanderRadius, dragUnder, dragOver
+//         cannon.SetCannonStats(fireRate, 500f); // Example value for bulletForce
+
+//         currentState = State.Wandering;
+//     }
+
+//     void Update()
+//     {
+//         switch (currentState)
+//         {
+//             case State.Wandering:
+//                 movement.Wander();
+//                 if (IsPlayerInRange())
+//                     currentState = State.Chasing;
+//                 break;
+
+//             case State.Chasing:
+//                 movement.Chase(player);
+//                 cannon.RotateToward(player);
+//                 if (IsPlayerInEngageRange())
+//                     currentState = State.Engaging;
+//                 break;
+
+//             case State.Engaging:
+//                 movement.Engage(player);
+//                 cannon.RotateToward(player);
+//                 cannon.TryFire();
+//                 if (!IsPlayerInEngageRange())
+//                     currentState = State.Chasing;
+//                 break;
+//         }
+//     }
+
+//     protected bool IsPlayerInRange()
+//     {
+//         return Vector3.Distance(transform.position, player.position) <= 50f; // Example detection range
+//     }
+
+//     protected bool IsPlayerInEngageRange()
+//     {
+//         return Vector3.Distance(transform.position, player.position) <= 10f; // Example engage range
+//     }
+
+//     public void TakeDamage(float damage)
+//     {
+//         healthComponent.TakeDamage(damage);
+//     }
+
+//     protected virtual void Die()
+//     {
+//         Destroy(gameObject);
+//     }
+
+//     protected abstract void AssignStats();
+//     protected abstract float GetChaseSpeed();
+//     protected abstract float GetWanderSpeed();
+// }

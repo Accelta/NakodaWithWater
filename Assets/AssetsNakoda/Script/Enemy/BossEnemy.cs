@@ -1,27 +1,28 @@
 using UnityEngine;
+
 public class BossEnemy : EnemyBase
 {
     protected override void AssignStats()
     {
-        health = 500f;          // Boss has much higher health
-        attackPower = 50f;      // Higher attack power
+        healthComponent.maxHealth = 500f;  // High health
+        attackPower = 50f;                 // High attack power
+        maxSpeed = 10f;                    // Low speed
+        fireRate = 0.5f;                   // Low fire rate
     }
 
     protected override float GetWanderSpeed()
     {
-        return 10f;  // Slower wandering speed for boss
+        return maxSpeed * 0.5f;  // Speed while wandering
     }
 
     protected override float GetChaseSpeed()
     {
-        return maxSpeed;  // Slower chase speed for boss
+        return maxSpeed;  // Full speed while chasing
     }
 
     protected override void Die()
     {
         base.Die();
         Debug.Log("Boss destroyed!");
-        // Additional behavior on death can be added here
-        // e.g., dropping special loot or triggering events
     }
 }

@@ -1,26 +1,28 @@
 using UnityEngine;
+
 public class MediumEnemy : EnemyBase
 {
     protected override void AssignStats()
     {
-        health = 100f;          // Medium enemies have moderate health
-        attackPower = 20f;      // Medium attack power
+        healthComponent.maxHealth = 100f;  // Medium health
+        attackPower = 20f;                 // Medium attack power
+        maxSpeed = 20f;                    // Medium speed
+        fireRate = 1f;                     // Medium fire rate
     }
 
     protected override float GetWanderSpeed()
     {
-        return 15f;  // Medium wandering speed
+        return maxSpeed * 0.75f;  // Speed while wandering
     }
 
     protected override float GetChaseSpeed()
     {
-        return maxSpeed;  // Medium chase speed
+        return maxSpeed;  // Full speed while chasing
     }
 
     protected override void Die()
     {
         base.Die();
         Debug.Log("Medium enemy destroyed!");
-        // Additional behavior on death can be added here
     }
 }

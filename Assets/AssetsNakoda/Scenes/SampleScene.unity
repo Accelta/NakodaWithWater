@@ -713,7 +713,7 @@ Transform:
   m_GameObject: {fileID: 154682121}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -42, z: 0}
+  m_LocalPosition: {x: 0, y: -164, z: 0}
   m_LocalScale: {x: 584.34186, y: 584.34186, z: 584.34186}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8488,8 +8488,10 @@ GameObject:
   - component: {fileID: 1383294458}
   - component: {fileID: 1383294457}
   - component: {fileID: 1383294456}
-  - component: {fileID: 1383294455}
   - component: {fileID: 1383294460}
+  - component: {fileID: 1383294462}
+  - component: {fileID: 1383294461}
+  - component: {fileID: 1383294463}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -8497,41 +8499,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1383294455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1383294454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0029c18804000e04a8a475d692d51b81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 0
-  player: {fileID: 543450652977557576}
-  cannonMainBodies:
-  - {fileID: 1287283893}
-  - {fileID: 1762352588}
-  cannonBarrels:
-  - {fileID: 87026995}
-  - {fileID: 616070653}
-  firePoints:
-  - {fileID: 999447650}
-  - {fileID: 888592497}
-  detectionRange: 50
-  fireRate: 0.5
-  bulletForce: 200
-  bulletPrefab: {fileID: 1508547874}
-  cannonRotationSpeed: 5
-  dragUnder: 2.5
-  dragOver: 0.1
-  maxSpeed: 20
-  acceleration: 8
-  turnSpeed: 15
-  rudderEffectiveness: 5
-  engageRange: 25
 --- !u!114 &1383294456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8619,7 +8586,7 @@ Transform:
   m_GameObject: {fileID: 1383294454}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.6, y: 1.08, z: 73}
+  m_LocalPosition: {x: 18, y: 1.08, z: -12.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8656,6 +8623,72 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1383294461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383294454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0029c18804000e04a8a475d692d51b81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  player: {fileID: 543450652977557576}
+  cannonMainBodies:
+  - {fileID: 1287283893}
+  cannonBarrels:
+  - {fileID: 87026995}
+  firePoints:
+  - {fileID: 87026995}
+  detectionRange: 50
+  fireRate: 1
+  bulletForce: 500
+  bulletPrefab: {fileID: 1508547874}
+  cannonRotationSpeed: 5
+  dragUnder: 2
+  dragOver: 0.5
+  maxSpeed: 20
+  acceleration: 5
+  turnSpeed: 2
+  rudderEffectiveness: 1
+  engageRange: 10
+--- !u!114 &1383294462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383294454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30345dd97d2f3844b86aba228bfe377b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+--- !u!65 &1383294463
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383294454}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.2279308, y: 2.2252734, z: 11.992665}
+  m_Center: {x: 0, y: 0.7758913, z: 3.1472287}
 --- !u!1 &1466988434
 GameObject:
   m_ObjectHideFlags: 0
@@ -9474,8 +9507,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602509147}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.05421719, y: 0, z: 0, w: 0.9985292}
-  m_LocalPosition: {x: -0.04190159, y: 9.539999, z: -18.68}
+  m_LocalRotation: {x: -0.07794539, y: 0, z: 0, w: 0.99695766}
+  m_LocalPosition: {x: -0.045445442, y: 3.3390846, z: 7.844823}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19875,6 +19908,7 @@ GameObject:
   - component: {fileID: 919132148703570679}
   - component: {fileID: 919132148703570682}
   - component: {fileID: 919132148703570683}
+  - component: {fileID: 919132148703570684}
   m_Layer: 0
   m_Name: Kapal_Player
   m_TagString: Untagged
@@ -20051,6 +20085,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+--- !u!65 &919132148703570684
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148703570674}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.322691, y: 2.4403849, z: 7.9293036}
+  m_Center: {x: 0, y: 1.4344106, z: 3.4646513}
 --- !u!23 &1033669456519527703
 MeshRenderer:
   m_ObjectHideFlags: 0
