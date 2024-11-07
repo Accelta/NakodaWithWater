@@ -8511,9 +8511,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   player: {fileID: 543450652977557576}
-  cannonMainBodies: []
-  cannonBarrels: []
-  firePoints: []
+  cannonMainBodies:
+  - {fileID: 1287283893}
+  - {fileID: 1762352588}
+  cannonBarrels:
+  - {fileID: 87026995}
+  - {fileID: 616070653}
+  firePoints:
+  - {fileID: 999447650}
+  - {fileID: 888592497}
   detectionRange: 50
   fireRate: 0.5
   bulletForce: 200

@@ -526,8 +526,8 @@ MonoBehaviour:
   switchSettingsMigration: 1
   HasSourceProject: 1
   HasPlatforms: 1
-  sourceProjectPath: ../../Users/axelt/Documents/FModProject/Nakoda-Audio-Fmod/Nakoda-Audio-Fmod.fspro
-  sourceBankPath: ../../Users/axelt/Documents/FModProject/Nakoda-Audio-Fmod/Build
+  sourceProjectPath: ../../FModProject/WPG-Nakoda_audio/WPG.fspro
+  sourceBankPath: ../../FModProject/WPG-Nakoda_audio/Build
   sourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
