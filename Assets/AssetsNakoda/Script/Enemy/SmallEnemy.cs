@@ -12,7 +12,7 @@ public class SmallEnemy : EnemyBase
 
     protected override float GetWanderSpeed()
     {
-        return maxSpeed * 0.8f;  // Speed while wandering
+        return maxSpeed * 0.4f;  // Speed while wandering
     }
 
     protected override float GetChaseSpeed()

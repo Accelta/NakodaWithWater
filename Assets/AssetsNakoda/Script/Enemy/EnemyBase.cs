@@ -221,6 +221,7 @@ public abstract class EnemyBase : MonoBehaviour
     protected abstract float GetChaseSpeed();
 }
 
+
 // using UnityEngine;
 
 // [RequireComponent(typeof(Rigidbody))]
