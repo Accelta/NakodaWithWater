@@ -50,7 +50,7 @@ public class Floater : MonoBehaviour
                     float submersion = Mathf.Clamp01(Mathf.Abs(difference));
                     rb.AddForceAtPosition(Vector3.up * floatingPower * Mathf.Abs(submersion), floaters[i].position, ForceMode.Force);
 
-                    if (moving[i] != null && !movingEmission.enabled && vel.magnitude > 0.2f)
+                    if (moving[i] != null && !movingEmission.enabled && vel.magnitude > 10f)
                         movingEmission.enabled = true;
                 }
                 else
@@ -76,7 +76,7 @@ public class Floater : MonoBehaviour
 
                 } 
 
-                if (vel.magnitude <= 0.2f && moving[i] != null && movingEmission.enabled)
+                if (vel.magnitude <= 5f && moving[i] != null && movingEmission.enabled)
                 {
                     movingEmission.enabled = false;
 

@@ -1078,7 +1078,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0
+    scalar: 2
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -6319,7 +6319,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0
+    scalar: 2
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -11885,7 +11885,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0
+    scalar: 2
     minScalar: 0
     maxCurve:
       serializedVersion: 2
@@ -34577,13 +34577,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370744a819548ab46b7fd575e3548190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 50
+  currentSpeedState: 0
+  slowSpeed: 25
+  normalSpeed: 45
+  fastSpeed: 65
   acceleration: 10
   deceleration: 10
   turnSpeed: 0.5
-  rudderEffectiveness: 5
+  rudderEffectiveness: 2
   rudderTurnAngle: 30
-  currentSpeed: 0
   rudderSmoothSpeed: 5
   rudder: {fileID: 138942962}
   dragUnder: 2.5
